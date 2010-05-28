@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;web_txjheprizedrawM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">Prize draw</label>
+			<label index="function1">Draw winners</label>
+            <label index="function2">Show recent winners</label>
+			<label index="error_root">Please select a sysfolder/a page from the page tree containing personnel data.</label>
+			<label index="error_no_records">The selected sysfolder/page does not contain records.</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="title">Verlosung</label>
+			<label index="function1">Verlosung</label>
+            <label index="function2">Bisherige Gewinner</label>
+			<label index="error_root">Bitte wählen Sie im Navigationsbaum einen Ordner/eine Seite mit personenbezogenen Datensätzen aus!</label>
+			<label index="error_no_records">Der gewählte Ordne/die gewählte Seite enthält keine Datensätze.</label>
+		</languageKey>
+	</data>
+</T3locallang>

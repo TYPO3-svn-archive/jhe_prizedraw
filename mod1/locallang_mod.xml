@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;web_txjheprizedrawM1&quot; - header, description</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="mlang_tabs_tab">Prize draw</label>
+			<label index="mlang_labels_tabdescr">Selects a number of random records from fe_user and/or tt_address (if installed) for a definable period of time for a prize draw</label>
+			<label index="mlang_labels_tablabel">Prize draw</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="mlang_tabs_tab">Verlosung</label>
+			<label index="mlang_labels_tabdescr">Dieses Modul wählt zufällige Datensätze aus fe_user und/oder tt_address in einem grenzbaren Zeitraum für Verlosungen aus.</label>
+			<label index="mlang_labels_tablabel">Verlosung</label>
+		</languageKey>
+	</data>
+</T3locallang>

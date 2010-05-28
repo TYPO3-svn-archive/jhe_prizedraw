@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'jhe_prizedraw'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="fe_users.tx_jheprizedraw_prize_draw_winner">Winner prize draw</label>
+			<label index="tt_address.tx_jheprizedraw_prize_draw_winner">Winner prize draw</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="fe_users.tx_jheprizedraw_prize_draw_winner">Verlosungsgewinner</label>
+			<label index="tt_address.tx_jheprizedraw_prize_draw_winner">Verlosungsgewinner</label>
+		</languageKey>
+	</data>
+</T3locallang>
