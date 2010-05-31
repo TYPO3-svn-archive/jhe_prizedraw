@@ -11,13 +11,33 @@
             <label index="function2">Show recent winners</label>
 			<label index="error_root">Please select a sysfolder/a page from the page tree containing personnel data.</label>
 			<label index="error_no_records">The selected sysfolder/page does not contain records.</label>
+			<label index="lbl_no_of_records">Wie viele Datensätze möchten Sie auswählen?</label>
+			<label index="lbl_record_type">Welche Art sind die auzuwählenden Datensätze?</label>
+			<label index="lbl_fe_user">Frontenduser</label>
+			<label index="lbl_tt_address">Adressdatensätze</label>
+			<label index="lbl_both">beides</label>
+			<label index="lbl_period">Zeitraum der Auswahl der Datensätze (nach Eintragsdatum)</label>
+			<label index="lbl_period_begin">Beginn</label>
+			<label index="lbl_period_end">Ende</label>
+			<label index="lbl_bt_execute">Starten</label>
+			<label index="lbl_select">Bitte auswählen...</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Verlosung</label>
 			<label index="function1">Verlosung</label>
             <label index="function2">Bisherige Gewinner</label>
 			<label index="error_root">Bitte wählen Sie im Navigationsbaum einen Ordner/eine Seite mit personenbezogenen Datensätzen aus!</label>
-			<label index="error_no_records">Der gewählte Ordne/die gewählte Seite enthält keine Datensätze.</label>
+			<label index="error_no_records">Der gewählte Ordner/die gewählte Seite enthält keine Datensätze.</label>
+			<label index="lbl_no_of_records">Wie viele Datensätze möchten Sie auswählen?</label>
+			<label index="lbl_record_type">Welche Art sind die auzuwählenden Datensätze?</label>
+			<label index="lbl_fe_user">Frontenduser</label>
+			<label index="lbl_tt_address">Adressdatensätze</label>
+			<label index="lbl_both">beides</label>
+			<label index="lbl_period">Zeitraum der Auswahl der Datensätze (nach Eintragsdatum)</label>
+			<label index="lbl_period_begin">Beginn</label>
+			<label index="lbl_period_end">Ende</label>
+			<label index="lbl_bt_execute">Starten</label>
+			<label index="lbl_select">Bitte auswählen...</label>
 		</languageKey>
 	</data>
 </T3locallang>

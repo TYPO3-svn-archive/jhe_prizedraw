@@ -1,0 +1,26 @@
+#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p {
+	clear: both;
+	margin: 0 0 5px 0;
+}
+
+#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p label {
+	display: block;
+	float: left;
+	width: 300px;
+	text-align: right;
+	margin: 0 3px 0 0;
+}
+
+#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p .header {
+	width: 100%;
+	margin: 5px 0;
+	text-align: left;
+}
+
+#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p #bt_execute {
+	margin: 0 0 0 303px;
+}
+
+#no_of_records, #record_type, #period_begin, #period_end {
+	width: 140px;
+}

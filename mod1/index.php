@@ -30,10 +30,9 @@
 
 $LANG->includeLLFile('EXT:jhe_prizedraw/mod1/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
+require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
-
-
 
 /**
  * Module 'Prize draw' for the 'jhe_prizedraw' extension.
@@ -96,7 +95,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 							// Draw the header.
 						$this->doc = t3lib_div::makeInstance('mediumDoc');
 						$this->doc->backPath = $BACK_PATH;
-						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
+						$this->doc->form='<form id="tx_jheprizedraw_form" action="" method="post" enctype="multipart/form-data">';
 
 							// JavaScript
 						$this->doc->JScode = '
@@ -115,7 +114,9 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 						';
 
 						//$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
-																		
+
+						$this->doc->inDocStylesArray[] = t3lib_div::getURL(t3lib_extMgm::extPath('jhe_prizedraw').'res/css/be.css');
+						
 						$this->content.=$this->doc->startPage($LANG->getLL('title'));
 						$this->content.=$this->doc->header($LANG->getLL('title'));
 						$this->content.=$this->doc->spacer(5);
@@ -166,50 +167,96 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 				function moduleContent(){
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 					
+					
+				//$listGroupNames = t3lib_BEfunc::TYPO3_copyRightNotice();
+				//var_dump($listGroupNames);	
+					
+					
+				//include_once(t3lib_extMgm::extPath('date2cal') . 'src/class.jscalendar.php');
+				//var_dump(include_once(t3lib_extMgm::extPath('date2cal') . 'src/class.jscalendar.php'));
+					
+				
+				//if (class_exists('JSCalender')){
+				//	$JSCalendar = JSCalendar::getInstance();
+				//} else {
+				//	echo "Class JSCalender not found!";
+				//}
+				
+				//
+				//$this->markerArray['###FIELD###'] .= $JSCalendar->render($value);
+				//if (($jsCode = $JSCalendar->getMainJS()) != '') {
+				//	$GLOBALS['TSFE']->additionalHeaderData['powermail_date2cal'] = $jsCode;
+				//}
+					
+				//var_dump(include_once(t3lib_extMgm::siteRelPath('date2cal') . '/src/class.jscalendar.php'));
+										
 					switch((string)$this->MOD_SETTINGS['function']){
                     	case 1:
-                    		
-                    		//var_dump($this->pageinfo['uid'] . " <br/> " . $this->pageinfo['doktype'] . " <br/> " . $this->pageinfo['module'] . "<br/>");
-                    		
+                    		                   		                   		
                     		$uid = $this->pageinfo['uid'];
                     		
+                    		if($uid){
+                    			$resFeUserRecords = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(*)', 'fe_users', 'pid = ' . $uid . '' );
+	                       		$resFeUserRecordsArr = $GLOBALS['TYPO3_DB']->sql_fetch_row($resFeUserRecords) or die (mysql_error());
+        	            		$noFeUserRecords = $resFeUserRecordsArr[0];
+            	        		
+                	    		$resAddressRecords = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(*)', 'tt_address', 'pid = '. $uid .'');
+                    			$resAddressRecordsArr = $GLOBALS['TYPO3_DB']->sql_fetch_row($resAddressRecords) or die (mysql_error());
+                    			$noAddressRecords = $resAddressRecordsArr[0];
+                    			
+	                    		$sumRelRecords = $noFeUserRecords + $noAddressRecords;
+        	           		}
+                    		 
+
                     		if(!$uid) {
 								$content = $LANG->getLL('error_root'); 
-							} else {
-                        		$content .= '<form id="form1" name="form1" method="post" action="">
-  												<p>
-    												<label for="no_of_recodes">Wie viele Datensätze möchten Sie auswählen?</label>
-    												<input name="no_of_recodes" type="text" id="no_of_recodes" size="4" />
-  												</p>
-  												<p>
-    												<label for="record_type">Welche Art sind die auzuwählenden Datensätze?</label>
-    												<select name="record_type" id="record_type">
-      													<option value="fe_user" selected="selected">Frontenduser</option>
-      													<option value="tt_address">Adressdatensätze</option>
-      													<option value="both">beides</option>
-	    											</select>
-  												</p>
-  												<p>
-  													<label>Zeitraum der Auswahl der Datensätze (nach Eintragsdatum)</label>
-  												</p>
-  												<p>
-    												<label for="period_begin">Beginn</label>
-    												<input type="text" name="period_begin" id="period_begin" />
-  												</p>
-  												<p>
-    												<label for="period_end">Ende</label>
-    												<input type="text" name="period_end" id="period_end" />
-	  											</p>
-  												<p>
-    												<input type="submit" name="bt_execute" id="bt_execute" value="Los!" />
-  												</p>
-											</form>';
+							} else if($sumRelRecords == 0){
+									$content = $LANG->getLL('error_no_records');
+								} else {
+                        			$content .= '<form id="jet" name="jet" method="post" action="">
+  													<p>
+    													<label for="no_of_records">' . $LANG->getLL('lbl_no_of_records') . '</label>
+    													<input name="no_of_records" type="text" id="no_of_records" size="4" />
+  													</p>';
+									
+                        			if(!$noFeUserRecords) {
+                        				$content .=	'	<input name="adressOnly" type="hidden" id="adressOnly" value="true" />';
+                        			} else if(!$noAddressRecords) {
+                        				$content .=	'	<input name="feUserOnly" type="hidden" id="feUserOnly" value="true" />';
+                        			} else {
+                        				$content .=	'	<p>
+    														<label for="record_type">' . $LANG->getLL('lbl_record_type') . '</label>
+    														<select name="record_type" id="record_type">
+      															<option value=""selected="selected">' . $LANG->getLL('lbl_select') . '</option>
+    															<option value="fe_user">' . $LANG->getLL('lbl_fe_user') . '</option>
+      															<option value="tt_address">' . $LANG->getLL('lbl_tt_address') . '</option>
+      															<option value="both">' . $LANG->getLL('lbl_both') . '</option>
+	    													</select>
+  														</p>';
+                        			}
+									
+									$content .= '	<p>
+  														<label class="header">' . $LANG->getLL('lbl_period') . '</label>
+  													</p>
+  													<p>
+    													<label for="period_begin">' . $LANG->getLL('lbl_period_begin') . '</label>
+    													<input type="text" name="period_begin" id="period_begin" />
+  													</p>
+  													<p>
+    													<label for="period_end">' . $LANG->getLL('lbl_period_end') . '</label>
+    													<input type="text" name="period_end" id="period_end" />
+	  												</p>
+  													<p>
+    													<input type="submit" name="bt_execute" id="bt_execute" value="' . $LANG->getLL('lbl_bt_execute') . '" />
+  													</p>
+												</form>';
 							
-								$content.='<br />This is the GET/POST vars sent to the script:<br />'.
-										'GET:'.t3lib_div::view_array($_GET).'<br />'.
-										'POST:'.t3lib_div::view_array($_POST).'<br />'.
-										'';
-							}
+									$content.='<br />This is the GET/POST vars sent to the script:<br />'.
+											'GET:'.t3lib_div::view_array($_GET).'<br />'.
+											'POST:'.t3lib_div::view_array($_POST).'<br />'.
+											'';
+								}
+							
                 	        $this->content.=$this->doc->section('',$content,0,1);
 						break;
                         case 2:
