@@ -21,6 +21,8 @@
 	margin: 0 0 0 303px;
 }
 
-#no_of_records, #record_type, #period_begin, #period_end {
+#ext-jhe-prizedraw-mod1-index-php #no_of_records, 
+#ext-jhe-prizedraw-mod1-index-php #record_type, 
+#ext-jhe-prizedraw-mod1-index-php #period_begin, #period_end {
 	width: 140px;
 }
