@@ -23,6 +23,15 @@
 
 #ext-jhe-prizedraw-mod1-index-php #no_of_records, 
 #ext-jhe-prizedraw-mod1-index-php #record_type, 
-#ext-jhe-prizedraw-mod1-index-php #period_begin, #period_end {
+#ext-jhe-prizedraw-mod1-index-php #period_begin, 
+#ext-jhe-prizedraw-mod1-index-php #period_end {
 	width: 140px;
+}
+
+#ext-jhe-prizedraw-mod1-index-php #no_of_records_error, 
+#ext-jhe-prizedraw-mod1-index-php #record_type_error, 
+#ext-jhe-prizedraw-mod1-index-php #period_begin_error, 
+#ext-jhe-prizedraw-mod1-index-php #period_end_error {
+	color: red;
+	margin: 0 0 0 303px;
 }

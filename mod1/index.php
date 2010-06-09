@@ -182,6 +182,103 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 				function moduleContent(){
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
+					$this->doc->postCode .= '
+						<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+						<script type="text/javascript">
+				
+							$(document).ready(function() {
+								
+								// AJAX Request per ajaxID
+								$("#no_of_records").bind("focusout", function() {
+									$.ajax({
+					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=number",
+					    				success: function(result) {
+					    					if(result) {
+												$("#no_of_records").after("<span id=\"no_of_records_error\">" + result + "<span>");
+												$("#bt_execute").attr("value", "NEIN");
+											} else {
+												$("#bt_execute").attr("value", "Starten");
+											}
+										}
+									});
+						
+									return false;
+								});
+					
+								$("#no_of_records").bind("focus", function() {
+									$("#no_of_records_error").remove();
+								});
+								
+								$("#record_type").bind("focusout", function() {
+									$.ajax({
+					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=select",
+					    				success: function(result) {
+					    					if(result) {
+												$("#record_type").after("<span id=\"record_type_error\">" + result + "<span>");
+												$("#bt_execute").attr("value", "NEIN");
+											} else {
+												$("#bt_execute").attr("value", "Starten");
+											} 
+										}
+									});
+						
+									return false;
+								});
+					
+								$("#record_type").bind("focus", function() {
+									$("#record_type_error").remove();
+								});
+								
+								$("#period_begin").bind("focusout", function() {
+									$.ajax({
+					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=date",
+					    				success: function(result) {
+					    					if(result) {
+												$("#period_begin").after("<span id=\"period_begin_error\">" + result + "<span>");
+												$("#bt_execute").attr("value", "NEIN");
+											} else {
+												$("#bt_execute").attr("value", "Starten");
+											}
+										}
+									});
+						
+									return false;
+								});
+					
+								$("#period_begin").bind("focus", function() {
+									$("#period_begin_error").remove();
+								});
+								
+								$("#period_end").bind("focusout", function() {
+									$.ajax({
+					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=date",
+					    				success: function(result) {
+					    					if(result) {
+												$("#period_end").after("<span id=\"period_end_error\">" + result + "<span>");
+												$("#bt_execute").attr("value", "NEIN");
+											} else {
+												$("#bt_execute").attr("value", "Starten");
+											} 
+										}
+									});
+						
+									return false;
+								});
+					
+								$("#period_end").bind("focus", function() {
+									$("#period_end_error").remove();
+								});
+								
+							});
+								
+							
+								if ($("#bt_execute").val() == "Starten"){
+									$("#bt_execute").removeAttr("disabled");
+								}
+						</script>	
+					';
+					
+					
 					switch((string)$this->MOD_SETTINGS['function']){
                     	case 1:
 
@@ -200,7 +297,8 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 							} else if($sumRelRecords == 0){
 									$content = $LANG->getLL('error_no_records');
 								} else {
-                        			$content .= '
+																
+                        			$content .= '	<input type="hidden" id="errorCounter" />
   													<p>
     													<label for="no_of_records">' . $LANG->getLL('lbl_no_of_records') . '</label>
     													<input name="no_of_records" type="text" id="no_of_records" size="4" />
@@ -227,71 +325,19 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
   													</p>
   													<p>
     													<label for="period_begin">' . $LANG->getLL('lbl_period_begin') . '</label>
-    													<input type="text" name="period_begin" id="tceforms-datetimefield-period_begin" />
+    													<input type="text" name="period_begin" id="period_begin" />
   													</p>
   													<p>
     													<label for="period_end">' . $LANG->getLL('lbl_period_end') . '</label>
-    													<input type="text" name="period_end" id="tceforms-datetimefield-period_end" />
+    													<input type="text" name="period_end" id="period_end" />
 	  												</p>
   													<p>
-    													<input type="submit" name="bt_execute" id="bt_execute" value="' . $LANG->getLL('lbl_bt_execute') . '" />
+    													<input type="submit" name="bt_execute" id="bt_execute" disabled="disabled" value="' . $LANG->getLL('lbl_bt_execute') . '" />
   													</p>
 												';
 								}
 
-							if($GLOBALS['_POST']['bt_execute']){
-								$errorMessage = '';
-								
-								//$checkdate = checkdate('2','30','2010');
-								//$errorMessage .= $checkdate . '<br />';
-																
-								//Validierung der Eingabe
-								if(!$GLOBALS['_POST']['no_of_records']) {
-									$errorMessage .= '<li>Bitte geben Sie an, wie viele Datensätze Sie ausgeben lassen wollen.</li>';
-								} else if(!is_numeric(!$GLOBALS['_POST']['no_of_records'])) {
-									$errorMessage .= '<li>Bitte geben Sie eine numerische Anzahl der gewünschten Datensätze ein.</li>';
-								}
-								if(!$GLOBALS['_POST']['record_type']){
-									$errorMessage .= '<li>Bitte wählen Sie den Typ der auszuwählenden Datensätze aus.</li>';
-								}
-
-								/*if($GLOBALS['_POST']['period_begin'] && !$GLOBALS['_POST']['period_end']){
-									$errorMessage .= '<li>Huiuiui!</li>';
-								}*/
-
-								if($errorMessage) {
-									$message = t3lib_div::makeInstance(
-                	        			't3lib_FlashMessage', 
-                	        			'<ul>' . $errorMessage . '</ul>', 
-                	        			'Fehler bei der Eingabe',
-                	        			t3lib_FlashMessage::ERROR,
-                	        			FALSE
-                	        		);
-                	        		$content .= $message->render();
-								} else {
-									$content = '';
-									
-									$noOfRecords = $GLOBALS['_POST']['no_of_records'];
-									$recordType = $GLOBALS['_POST']['record_type'];
-									$periodBegin = $GLOBALS['_POST']['period_begin'];
-									$periodEnd = $GLOBALS['_POST']['period_end'];
-									
-									$content .= 'Sie möchten '. $noOfRecords .' Datensätze vom Typ ' . $recordType . ' auswählen lassen.';
-									if($periodBegin && !$periodEnd) {
-										$content .= '<br />Sie erhalten Ergebnisse ab dem ' . $periodBegin . '.';
-									} else if (!$periodBegin && $periodEnd){
-										$content .= '<br />Sie erhalten Ergbenisse bis zum ' . $periodEnd . '.';
-									} else if ($periodBegin && $periodEnd) {
-										$content .= '<br />Sie erhalten Ergbenisse vom ' . $periodBegin . ' bis zum ' . $periodEnd . '.';
-									} else {
-										$content .= '<br />Sie verzichten auf eine zeitliche Eingrenzung.';
-									}
-								}
-
-								
-                	        }
-
-                	        $content.='<br />This is the GET/POST vars sent to the script:<br />'.
+							$content.='<br />This is the GET/POST vars sent to the script:<br />'.
 											'GET:'.t3lib_div::view_array($_GET).'<br />'.
 											'POST:'.t3lib_div::view_array($_POST).'<br />'.
 											'';
