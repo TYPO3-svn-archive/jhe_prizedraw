@@ -188,6 +188,11 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 				
 							$(document).ready(function() {
 								
+								var no_of_records_error_id = "1";
+								var record_type_error_id = "1";
+								var period_begin_error_id = "0";
+								var period_end_error_id = "0";
+								
 								// AJAX Request per ajaxID
 								$("#no_of_records").bind("focusout", function() {
 									$.ajax({
@@ -195,9 +200,16 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 					    				success: function(result) {
 					    					if(result) {
 												$("#no_of_records").after("<span id=\"no_of_records_error\">" + result + "<span>");
-												$("#bt_execute").attr("value", "NEIN");
+												no_of_records_error_id = "1";
 											} else {
+												no_of_records_error_id = "0";
+											}
+											var error = no_of_records_error_id + record_type_error_id + period_begin_error_id + period_end_error_id;
+											if(error == "0000"){
+												$("#bt_execute").removeAttr("disabled");
 												$("#bt_execute").attr("value", "Starten");
+											} else {
+												$("#bt_execute").attr("value", "Fehler");
 											}
 										}
 									});
@@ -215,10 +227,18 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 					    				success: function(result) {
 					    					if(result) {
 												$("#record_type").after("<span id=\"record_type_error\">" + result + "<span>");
-												$("#bt_execute").attr("value", "NEIN");
+												record_type_error_id = "1";
+
 											} else {
+												record_type_error_id = "0";
+											}
+											var error = no_of_records_error_id + record_type_error_id + period_begin_error_id + period_end_error_id;
+											if(error == "0000"){
+												$("#bt_execute").removeAttr("disabled");
 												$("#bt_execute").attr("value", "Starten");
-											} 
+											} else {
+												$("#bt_execute").attr("value", "Fehler");
+											}
 										}
 									});
 						
@@ -235,9 +255,16 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 					    				success: function(result) {
 					    					if(result) {
 												$("#period_begin").after("<span id=\"period_begin_error\">" + result + "<span>");
-												$("#bt_execute").attr("value", "NEIN");
+												period_begin_error_id = "1";
 											} else {
+												period_begin_error_id = "0";
+											}
+											var error = no_of_records_error_id + record_type_error_id + period_begin_error_id + period_end_error_id;
+											if(error == "0000"){
+												$("#bt_execute").removeAttr("disabled");
 												$("#bt_execute").attr("value", "Starten");
+											} else {
+												$("#bt_execute").attr("value", "Fehler");
 											}
 										}
 									});
@@ -255,10 +282,17 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 					    				success: function(result) {
 					    					if(result) {
 												$("#period_end").after("<span id=\"period_end_error\">" + result + "<span>");
-												$("#bt_execute").attr("value", "NEIN");
+												period_end_error_id = "1";
 											} else {
+												period_end_error_id = "0";
+											}
+											var error = no_of_records_error_id + record_type_error_id + period_begin_error_id + period_end_error_id;
+											if(error == "0000"){
+												$("#bt_execute").removeAttr("disabled");
 												$("#bt_execute").attr("value", "Starten");
-											} 
+											} else {
+												$("#bt_execute").attr("value", "Fehler");
+											}
 										}
 									});
 						
@@ -268,13 +302,22 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 								$("#period_end").bind("focus", function() {
 									$("#period_end_error").remove();
 								});
-								
+							
+								$("#bt_execute").click(function() {
+									$.ajax({
+					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::submit&no_of_records=" + $("#no_of_records").val() + "&record_type=" + $("#record_type").val() + "&period_begin=" + $("#period_begin").val() + "&period_end=" + $("#period_end").val() + "&uid=" + $("#uid").val() + "",
+					    				success: function(result) {
+					    					$("#result").html(result);
+										}
+									});
+						
+									return false;
+								});
+							
 							});
 								
 							
-								if ($("#bt_execute").val() == "Starten"){
-									$("#bt_execute").removeAttr("disabled");
-								}
+								
 						</script>	
 					';
 					
@@ -298,7 +341,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 									$content = $LANG->getLL('error_no_records');
 								} else {
 																
-                        			$content .= '	<input type="hidden" id="errorCounter" />
+                        			$content .= '	<input type="hidden" id="uid" value="' . $uid . '" />
   													<p>
     													<label for="no_of_records">' . $LANG->getLL('lbl_no_of_records') . '</label>
     													<input name="no_of_records" type="text" id="no_of_records" size="4" />
@@ -332,17 +375,13 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
     													<input type="text" name="period_end" id="period_end" />
 	  												</p>
   													<p>
-    													<input type="submit" name="bt_execute" id="bt_execute" disabled="disabled" value="' . $LANG->getLL('lbl_bt_execute') . '" />
+    													<input type="submit" name="bt_execute" id="bt_execute" disabled="disabled" value="' . $LANG->getLL('lbl_bt_execute_firststep') . '" />
   													</p>
+													<div id="result"></div>
 												';
 								}
 
-							$content.='<br />This is the GET/POST vars sent to the script:<br />'.
-											'GET:'.t3lib_div::view_array($_GET).'<br />'.
-											'POST:'.t3lib_div::view_array($_POST).'<br />'.
-											'';
-                	        
-                	        $this->content.=$this->doc->section('',$content,0,1);
+							$this->content.=$this->doc->section('',$content,0,1);
 
 						break;
                         case 2:

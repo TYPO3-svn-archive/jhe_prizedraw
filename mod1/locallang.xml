@@ -20,6 +20,8 @@
 			<label index="lbl_period_begin">Beginn</label>
 			<label index="lbl_period_end">Ende</label>
 			<label index="lbl_bt_execute">Starten</label>
+			<label index="lbl_bt_execute_firststep">Bitte ausfüllen...</label>
+			<label index="lbl_bt_execute_disabled">Bitte Fehler bereinigen...</label>
 			<label index="lbl_select">Bitte auswählen...</label>
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -37,6 +39,8 @@
 			<label index="lbl_period_begin">Beginn</label>
 			<label index="lbl_period_end">Ende</label>
 			<label index="lbl_bt_execute">Starten</label>
+			<label index="lbl_bt_execute_firststep">Bitte ausfüllen...</label>
+			<label index="lbl_bt_execute_disabled">Bitte Fehler bereinigen...</label>
 			<label index="lbl_select">Bitte auswählen...</label>
 		</languageKey>
 	</data>
