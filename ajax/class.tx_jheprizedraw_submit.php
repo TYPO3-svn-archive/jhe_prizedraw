@@ -27,6 +27,7 @@ require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 require_once(PATH_t3lib . 'class.t3lib_div.php');
 require_once(PATH_t3lib . 'class.t3lib_db.php');
 require_once(PATH_t3lib . 'class.t3lib_flashmessage.php');
+require_once(PATH_tslib . 'class.tslib_content.php');
 
 class tx_jheprizedraw_submit {
 
@@ -37,47 +38,37 @@ class tx_jheprizedraw_submit {
 	 */
 	public function main() { 
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-		 
+		
+		//_GET-data to variables
 		$no_of_records = t3lib_div::_GET('no_of_records');
 		$record_type = t3lib_div::_GET('record_type');
-		$period_begin = t3lib_div::_GET('period_begin');
-		$period_end = t3lib_div::_GET('period_end');
+		$period_begin = explode('-', t3lib_div::_GET('period_begin'));
+		$period_end = explode('-', t3lib_div::_GET('period_end'));
 		$uid = t3lib_div::_GET('uid');
-				
+		
+		$tstampBegin = mktime(0,0,0,$period_begin[1],$period_begin[0],$period_begin[2]); 
+		$tstampEnd = mktime(23,59,59,$period_end[1],$period_end[0],$period_end[2]); 
+		
 		$error = "";
 		
+		//Begin HTML output
 		$htmlOutput = "<h3>Ergebnis:</h3>
-						<table>
+						<table border='0' width='100%'>
 							<thead>
     							<tr>
       								<th>Name</th>
       								<th>Adresse</th>
       								<th>PLZ, Ort</th>
       								<th>eMail</th>
-      								<th>Checkbox</th>
-      								<th>Typ</th>
+      								<th></th>
 								</tr>
   							</thead>
   							<tbody>";		
 		
-		$resA = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'COUNT(*)', 
-			'fe_users', 
-			'deleted = 0 AND disable = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . ''
-		);
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_row($resA)){
-			$maxFeusers = $row['0'];
-		}
-
-		$resB = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'COUNT(*)', 
-			'tt_address', 
-			'deleted = 0 AND hidden = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . ''
-		);
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_row($resB)){
-			$maxTtaddress = $row['0'];
-		}
-
+		
+		
+		$maxFeusers = $this->getMaxRecords('fe_users', 'disable', $uid, 'crdate', $tstampBegin, $tstampEnd);
+		$maxTtaddress = $this->getMaxRecords('tt_address', 'hidden', $uid, 'tstamp', $tstampBegin, $tstampEnd);
 		$maxSum = ($maxFeusers + $maxTtaddress);		
 		
 		switch($record_type) {
@@ -98,10 +89,8 @@ class tx_jheprizedraw_submit {
 				}
 				break;
 			case 'both':
-				
 				if($maxSum >= $no_of_records) {
 					$rand = rand(1,$no_of_records);
-					
 					if($maxFeusers >= $rand){
 						$getFeusers = $rand;
 						$getTt_address = $no_of_records - $rand; 
@@ -116,52 +105,13 @@ class tx_jheprizedraw_submit {
 				
 				break;
 		}
-
 		
 		
-		
-		$resFeusers = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'name, address, zip, city, email', 
-			'fe_users', 
-			'deleted = 0 AND disable = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . '',
-			'',
-			'RAND()',
-			$getFeusers
-		);
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resFeusers)) {
-			$htmlOutput .= "<tr>
-      							<td>". $row['name'] ."</td>
-      							<td>". $row['address'] ."</td>
-      							<td>". $row['zip'] ." ". $row['city'] ."</td>
-      							<td>". $row['email'] ."</td>
-      							<td>Checkbox</td>
-      							<td>fe_users</td>
-							</tr>"; 
-		}
-		
-		
-		
-		
-		$resTtaddress = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'name, address, zip, city, email', 
-			'tt_address', 
-			'deleted = 0 AND hidden = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . '',
-			'',
-			'RAND()',
-			$getTt_address
-		);
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resTtaddress)) {
-			$htmlOutput .= "<tr>
-      							<td>". $row['name'] ."</td>
-      							<td>". $row['address'] ."</td>
-      							<td>". $row['zip'] ." ". $row['city'] ."</td>
-      							<td>". $row['email'] ."</td>
-      							<td>Checkbox</td>
-      							<td>tt_address</td>
-							</tr>"; 
-		}
+		$htmlOutput .= $this->getSQLDataToTable('fe_users', 'disable', $uid, $getFeusers, 'crdate', $tstampBegin, $tstampEnd);
+		$htmlOutput .= $this->getSQLDataToTable('tt_address', 'hidden', $uid, $getTt_address, 'tstamp', $tstampBegin, $tstampEnd);
 				
-		$htmlOutput .= "</tbody></table>";
+		$htmlOutput .= "</tbody></table><input type='submit' name='save' id='bt_save' value='Speichern' />";
+		
 		if(!$error) {
 			$result = $htmlOutput;
 		} else {
@@ -173,29 +123,75 @@ class tx_jheprizedraw_submit {
 				t3lib_FlashMessage::ERROR,
 				FALSE
 			);
-			$errorMessage = $message->render();
-			
-			
-			
-			
-			
-			
-			$result = $errorMessage;
+			$result = $message->render();
 		}
 		
 		return $result;
 	}
 	
-	public function getMaxRecords($table, $uid){
+	public function getMaxRecords($table, $hidden, $uid, $create = '', $period_begin = '', $period_end = ''){
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+				
+		if(!$period_begin && !$period_end){ //both fields empty
+			$sqlWhere = '';
+		} else if($period_begin && !$period_end) { //period_begin filled, period_end empty
+			$sqlWhere = ' AND ' . $create . ' >= ' . $period_begin . '';
+		} else if (!$period_begin && $period_end) { //period_begin empty, period_end filled
+			$sqlWhere = ' AND ' . $create . ' <= ' . $period_end . '';
+		} else if($period_begin && $period_end) { //both fields filled
+			$sqlWhere = ' AND ' . $create . ' >= ' . $period_begin . ' AND ' . $create . ' <= ' . $period_end . '';
+		}
 		
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'COUNT(*)', 
 			$table, 
-			'deleted = 0 AND hidden = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . ''
+			'deleted = 0 AND ' . $hidden . ' = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . $sqlWhere
 		);
-		$result = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		
+		return $row['0'];
 	}
+	
+	
+	public function getSQLDataToTable ($table, $hidden, $uid, $noOfRecords , $create = '', $tstampBegin = '', $tstampEnd = '') {
+		
+		if(!$tstampBegin && !$tstampEnd){
+			$sqlWhereTime = '';
+		} else if ($tstampBegin && !$tstampEnd) {
+			$sqlWhereTime = ' AND ' . $create . ' >= ' . $tstampBegin;
+		} else if (!$tstampBegin && $tstampEnd) {
+			$sqlWhereTime = ' AND ' . $create . ' <= ' . $tstampEnd;
+		} else if ($tstampBegin && $tstampEnd) {
+			$sqlWhereTime = ' AND ' . $create . ' >= ' . $tstampBegin . ' AND ' . $create . ' <= ' . $tstampEnd;
+		}
+		
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'uid,name, address, zip, city, email', 
+			$table, 
+			'deleted = 0 AND ' . $hidden . ' = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . $sqlWhereTime . '',
+			'',
+			'RAND()',
+			$noOfRecords
+		);
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			
+			$email = tslib_cObj::getMailTo($row['email'],$row['email']);
+			
+			$htmlOutput .= "<tr>
+      							<td>". $row['name'] ."</td>
+      							<td>". $row['address'] ."</td>
+      							<td>". $row['zip'] ." ". $row['city'] ."</td>
+      							<td><a href='" . $email[0] . "'>" . $email[1] . "</a></td>
+      							<td align='center'><input type='checkbox' name='update' /><input type='hidden' name='recordID' id='recordID' value='" . $row['uid'] . "' /><input type='hidden' name='table' id='table' value='" . $table . "' /></td>
+							</tr>"; 
+		}
+		
+		return $htmlOutput;
+	}
+	
+	
+	
+	
 }
 
 $output = t3lib_div::makeInstance('tx_jheprizedraw_submit');
