@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Julian Kleinhans <typo3@kj187.de>
+*  c) 2010 Jari-Hermann Ernst <jari-hermann.ernst@bad-gmbh.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,6 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(PATH_t3lib . 'class.t3lib_scbase.php');
+require_once(PATH_t3lib . 'class.t3lib_befunc.php');
+require_once(PATH_t3lib . 'class.t3lib_div.php');
+require_once(PATH_t3lib . 'class.t3lib_db.php');
+
 class tx_jheprizedraw_check {
 
 	/**
@@ -30,8 +35,8 @@ class tx_jheprizedraw_check {
 	 * @return string
 	 */
 	public function main() {      
-		$data = $_GET['data'];
-		$type = $_GET['type'];
+		$data = t3lib_div::_GET('data');
+		$type = t3lib_div::_GET('type');
 		$result = '';
 		
 		switch($type) {

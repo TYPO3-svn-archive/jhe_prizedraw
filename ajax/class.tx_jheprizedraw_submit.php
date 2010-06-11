@@ -26,6 +26,7 @@ require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 require_once(PATH_t3lib . 'class.t3lib_div.php');
 require_once(PATH_t3lib . 'class.t3lib_db.php');
+require_once(PATH_t3lib . 'class.t3lib_flashmessage.php');
 
 class tx_jheprizedraw_submit {
 
@@ -164,7 +165,22 @@ class tx_jheprizedraw_submit {
 		if(!$error) {
 			$result = $htmlOutput;
 		} else {
-			$result = $error;
+			
+			$message = t3lib_div::makeInstance(
+				't3lib_FlashMessage', 
+                $error, 
+				'Fehler bei der Eingabe',
+				t3lib_FlashMessage::ERROR,
+				FALSE
+			);
+			$errorMessage = $message->render();
+			
+			
+			
+			
+			
+			
+			$result = $errorMessage;
 		}
 		
 		return $result;
