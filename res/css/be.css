@@ -1,9 +1,9 @@
-#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p {
+#ext-jhe-prizedraw-mod1-index-php .typo3-bigDoc #tx_jheprizedraw_form div p {
 	clear: both;
 	margin: 0 0 5px 0;
 }
 
-#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p label {
+#ext-jhe-prizedraw-mod1-index-php .typo3-bigDoc #tx_jheprizedraw_form div p label {
 	display: block;
 	float: left;
 	width: 300px;
@@ -11,14 +11,14 @@
 	margin: 0 3px 0 0;
 }
 
-#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p .header {
+#ext-jhe-prizedraw-mod1-index-php .typo3-bigDoc #tx_jheprizedraw_form div p .header {
 	width: 100%;
 	margin: 5px 0;
 	text-align: left;
 }
 
-#ext-jhe-prizedraw-mod1-index-php .typo3-mediumDoc #tx_jheprizedraw_form div p #bt_execute {
-	margin: 0 0 0 303px;
+#ext-jhe-prizedraw-mod1-index-php .typo3-bigDoc #tx_jheprizedraw_form div p #bt_execute, #bt_save {
+	margin: 5px 0 0 303px;
 }
 
 #ext-jhe-prizedraw-mod1-index-php #no_of_records, 
@@ -34,4 +34,18 @@
 #ext-jhe-prizedraw-mod1-index-php #period_end_error {
 	color: red;
 	margin: 0 0 0 303px;
+}
+
+#ext-jhe-prizedraw-mod1-index-php th {
+	border-bottom: 1px solid #333;
+	text-align: left;
+}
+
+#ext-jhe-prizedraw-mod1-index-php #ajaxloader {
+	float: right;
+	margin: 7px 295px 0 0;
+}
+
+#ext-jhe-prizedraw-mod1-index-php .hidden {
+	display: none;
 }
