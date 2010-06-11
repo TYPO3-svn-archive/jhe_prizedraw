@@ -112,7 +112,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
 							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
+						$this->doc = t3lib_div::makeInstance('bigDoc');
 						$this->doc->backPath = $BACK_PATH;
 						$this->doc->form='<form action="" id="tx_jheprizedraw_form" name="editform" method="post" enctype="multipart/form-data">';
 							// JavaScript
@@ -152,7 +152,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 					} else {
 							// If no access or if ID == zero
 
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
+						$this->doc = t3lib_div::makeInstance('bigDoc');
 						$this->doc->backPath = $BACK_PATH;
 
 						$this->content.=$this->doc->startPage($LANG->getLL('title'));
@@ -195,9 +195,11 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 								
 								// AJAX Request per ajaxID
 								$("#no_of_records").bind("focusout", function() {
+									$("#ajaxloader").show();
 									$.ajax({
 					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=number",
 					    				success: function(result) {
+					    					$("#ajaxloader").hide();
 					    					if(result) {
 												$("#no_of_records").after("<span id=\"no_of_records_error\">" + result + "<span>");
 												no_of_records_error_id = "1";
@@ -222,9 +224,11 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 								});
 								
 								$("#record_type").bind("focusout", function() {
+									$("#ajaxloader").show();
 									$.ajax({
 					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=select",
 					    				success: function(result) {
+					    					$("#ajaxloader").hide();
 					    					if(result) {
 												$("#record_type").after("<span id=\"record_type_error\">" + result + "<span>");
 												record_type_error_id = "1";
@@ -250,9 +254,11 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 								});
 								
 								$("#period_begin").bind("focusout", function() {
+									$("#ajaxloader").show();
 									$.ajax({
 					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=date",
 					    				success: function(result) {
+					    					$("#ajaxloader").hide();
 					    					if(result) {
 												$("#period_begin").after("<span id=\"period_begin_error\">" + result + "<span>");
 												period_begin_error_id = "1";
@@ -277,9 +283,11 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 								});
 								
 								$("#period_end").bind("focusout", function() {
+									$("#ajaxloader").show();
 									$.ajax({
 					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::check&data=" + $(this).val() + "&type=date",
 					    				success: function(result) {
+					    					$("#ajaxloader").hide();
 					    					if(result) {
 												$("#period_end").after("<span id=\"period_end_error\">" + result + "<span>");
 												period_end_error_id = "1";
@@ -304,9 +312,11 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 								});
 							
 								$("#bt_execute").click(function() {
+									$("#ajaxloader").show();
 									$.ajax({
 					    				url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::submit&no_of_records=" + $("#no_of_records").val() + "&record_type=" + $("#record_type").val() + "&period_begin=" + $("#period_begin").val() + "&period_end=" + $("#period_end").val() + "&uid=" + $("#uid").val() + "",
 					    				success: function(result) {
+					    					$("#ajaxloader").hide();
 					    					$("#result").html(result);
 										}
 									});
@@ -376,7 +386,9 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 	  												</p>
   													<p>
     													<input type="submit" name="bt_execute" id="bt_execute" disabled="disabled" value="' . $LANG->getLL('lbl_bt_execute_firststep') . '" />
+    													<span id="ajaxloader" class="hidden"><img src="../typo3conf/ext/jhe_prizedraw/res/img/ajaxloader.gif" width="16px" height="16px" alt="" title="" /></span>
   													</p>
+  													
 													<div id="result"></div>
 												';
 								}
