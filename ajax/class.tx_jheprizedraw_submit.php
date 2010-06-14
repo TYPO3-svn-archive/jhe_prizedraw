@@ -52,7 +52,39 @@ class tx_jheprizedraw_submit {
 		$error = "";
 		
 		//Begin HTML output
-		$htmlOutput = "<h3>Ergebnis:</h3>
+		$htmlOutput = "<script>
+						$(document).ready(function() {
+							$('#checkAll').click(function(){
+								var checked_status = this.checked;
+								$('input[name=update]').each(function(){
+									this.checked = checked_status;
+								});
+							});
+							
+							
+							
+							$('#bt_save').click(function() {
+
+								var checkedRecords = '';
+								var values = $('input[name=update]').serializeArray();
+								
+								$.each(values, function(i, values){
+      								checkedRecords += $(this).val() + '::';
+      							});
+																
+								$('#ajaxloader').show();
+								$.ajax({
+					    			url: '/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::save&savedata=' + checkedRecords + '',
+					    			success: function(result) {
+					    				$('#ajaxloader').hide();
+					    				$('#result').html(result);
+									}
+								});
+								return false;
+							});
+						});
+						</script>
+						<h3>Ergebnis:</h3>
 						<table border='0' width='100%'>
 							<thead>
     							<tr>
@@ -60,7 +92,7 @@ class tx_jheprizedraw_submit {
       								<th>Adresse</th>
       								<th>PLZ, Ort</th>
       								<th>eMail</th>
-      								<th></th>
+      								<th class='centered'><input type='checkbox' name='checkAll' id='checkAll' /></th>
 								</tr>
   							</thead>
   							<tbody>";		
@@ -182,7 +214,7 @@ class tx_jheprizedraw_submit {
       							<td>". $row['address'] ."</td>
       							<td>". $row['zip'] ." ". $row['city'] ."</td>
       							<td><a href='" . $email[0] . "'>" . $email[1] . "</a></td>
-      							<td align='center'><input type='checkbox' name='update' /><input type='hidden' name='recordID' id='recordID' value='" . $row['uid'] . "' /><input type='hidden' name='table' id='table' value='" . $table . "' /></td>
+      							<td align='center'><input type='checkbox' name='update' id='update' value='" . $row['uid'] . "|" . $table . "' /></td>
 							</tr>"; 
 		}
 		

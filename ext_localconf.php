@@ -27,4 +27,5 @@ if (!defined('TYPO3_MODE')) die ('Access denied.');
 // ajaxID Registrierung
 $TYPO3_CONF_VARS['BE']['AJAX']['tx_jheprizedraw::check']= t3lib_extMgm::extPath($_EXTKEY) . 'ajax/class.tx_jheprizedraw_check.php:tx_jheprizedraw_check->main';
 $TYPO3_CONF_VARS['BE']['AJAX']['tx_jheprizedraw::submit']= t3lib_extMgm::extPath($_EXTKEY) . 'ajax/class.tx_jheprizedraw_submit.php:tx_jheprizedraw_submit->main';
+$TYPO3_CONF_VARS['BE']['AJAX']['tx_jheprizedraw::save']= t3lib_extMgm::extPath($_EXTKEY) . 'ajax/class.tx_jheprizedraw_save.php:tx_jheprizedraw_save->main';
 ?>

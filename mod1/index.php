@@ -46,7 +46,9 @@ $LANG->includeLLFile('EXT:jhe_prizedraw/mod1/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 require_once(PATH_t3lib . 'class.t3lib_div.php');
+require_once(PATH_t3lib . 'class.t3lib_db.php');
 require_once(PATH_t3lib . 'class.t3lib_flashmessage.php');
+require_once(PATH_tslib . 'class.tslib_content.php');
 
 
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
@@ -67,7 +69,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
  *
  * @return	void
  */
-				function init()	{
+				public function init()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 					parent::init();
@@ -84,7 +86,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
  *
  * @return	void
  */
-				function menuConfig()	{
+				public function menuConfig()	{
 					global $LANG;
 					$this->MOD_MENU = Array (
 						'function' => Array (
@@ -101,7 +103,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
  *
  * @return	[type]		...
  */
-				function main()	{
+				public function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 					// Access check!
@@ -168,7 +170,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
  *
  * @return	void
  */
-				function printContent()	{
+				public function printContent()	{
 
 					$this->content.=$this->doc->endPage();
 					echo $this->content;
@@ -179,7 +181,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
  *
  * @return	void
  */
-				function moduleContent(){
+				public function moduleContent(){
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 					$this->doc->postCode .= '
@@ -323,7 +325,7 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 						
 									return false;
 								});
-							
+								
 							});
 								
 							
@@ -400,11 +402,30 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
                         	if(!$this->pageinfo['uid']) {
 								$content = $LANG->getLL('error_root');
 							} else {
-                        		$content.='';
-                            	$content.='<br />This is the GET/POST vars sent to the script:<br />'.
-										'GET:'.t3lib_div::view_array($_GET).'<br />'.
-										'POST:'.t3lib_div::view_array($_POST).'<br />'.
-										'';
+								
+								$uid = $this->pageinfo['uid'];
+								
+								$content .= "<h3>Bisherige Gewinner:</h3>
+												<table border='0' width='100%'>
+													<thead>
+    													<tr>
+      														<th>Name</th>
+      														<th>Adresse</th>
+      														<th>PLZ, Ort</th>
+      														<th>eMail</th>
+      														<th>Datum</th>
+      														<th>Art</th>
+														</tr>
+  													</thead>
+  													<tbody>";
+								
+								$content .= $this->getRecentWinnersOrderedByDate('fe_users', 'disable', $uid);
+								$content .= $this->getRecentWinnersOrderedByDate('tt_address', 'hidden', $uid);
+								
+								
+								$content .= "	</tbody>
+											</table>";
+								
 							}
                             $this->content.=$this->doc->section('',$content,0,1);
                         break;
@@ -418,13 +439,43 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 	 * @param	[type]		$pid: ...
 	 * @return	[type]		...
 	 */
-				function getNoOfRecordsPerPage($table, $pid) {
+				public function getNoOfRecordsPerPage($table, $pid) {
 
 					$resRecords = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(*)', $table, 'pid = ' . $pid . '' );
 	                $resRecordsArr = $GLOBALS['TYPO3_DB']->sql_fetch_row($resRecords) or die (mysql_error());
 
 	                return $resRecordsArr[0];
 
+				}
+				
+				
+				
+				public function getRecentWinnersOrderedByDate($table, $hidden, $uid){
+									
+								$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+									'uid,name, address, zip, city, email,tx_jheprizedraw_prize_draw_winner', 
+									$table, 
+									'deleted = 0 AND ' . $hidden . ' = 0 AND tx_jheprizedraw_prize_draw_winner != 0 AND pid = ' . $uid . '',
+									'',
+									'tx_jheprizedraw_prize_draw_winner'
+								);
+								
+								while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			
+									$email = tslib_cObj::getMailTo($row['email'],$row['email']);
+				
+									$htmlOutput .= "
+										<tr>
+	      									<td>". $row['name'] ."</td>
+    	  									<td>". $row['address'] ."</td>
+      										<td>". $row['zip'] ." ". $row['city'] ."</td>
+      										<td><a href='" . $email[0] . "'>" . $email[1] . "</a></td>
+      										<td>". date('d.m.Y', $row['tx_jheprizedraw_prize_draw_winner']) . "</td>
+      										<td>" . $table . "</td>
+										</tr>"; 
+									}
+		
+								return $htmlOutput;
 				}
 			}
 

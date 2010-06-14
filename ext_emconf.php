@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "jhe_prizedraw".
 #
-# Auto generated 10-06-2010 11:47
+# Auto generated 14-06-2010 09:47
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -40,7 +40,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:17:{s:9:"ChangeLog";s:4:"0433";s:10:"README.txt";s:4:"9fa9";s:12:"ext_icon.gif";s:4:"a4fa";s:17:"ext_localconf.php";s:4:"30ee";s:14:"ext_tables.php";s:4:"7b10";s:14:"ext_tables.sql";s:4:"e712";s:16:"locallang_db.xml";s:4:"857c";s:36:"ajax/class.tx_jheprizedraw_check.php";s:4:"a900";s:37:"ajax/class.tx_jheprizedraw_submit.php";s:4:"5ede";s:19:"doc/wizard_form.dat";s:4:"2032";s:20:"doc/wizard_form.html";s:4:"c537";s:13:"mod1/conf.php";s:4:"5828";s:14:"mod1/index.php";s:4:"ec12";s:18:"mod1/locallang.xml";s:4:"a074";s:22:"mod1/locallang_mod.xml";s:4:"0dba";s:19:"mod1/moduleicon.gif";s:4:"1169";s:14:"res/css/be.css";s:4:"6139";}',
+	'_md5_values_when_last_written' => 'a:19:{s:9:"ChangeLog";s:4:"0433";s:10:"README.txt";s:4:"9fa9";s:12:"ext_icon.gif";s:4:"a4fa";s:17:"ext_localconf.php";s:4:"4609";s:14:"ext_tables.php";s:4:"7b10";s:14:"ext_tables.sql";s:4:"e712";s:16:"locallang_db.xml";s:4:"857c";s:36:"ajax/class.tx_jheprizedraw_check.php";s:4:"44a5";s:35:"ajax/class.tx_jheprizedraw_save.php";s:4:"bc6d";s:37:"ajax/class.tx_jheprizedraw_submit.php";s:4:"1174";s:19:"doc/wizard_form.dat";s:4:"2032";s:20:"doc/wizard_form.html";s:4:"c537";s:13:"mod1/conf.php";s:4:"5828";s:14:"mod1/index.php";s:4:"03c1";s:18:"mod1/locallang.xml";s:4:"a074";s:22:"mod1/locallang_mod.xml";s:4:"0dba";s:19:"mod1/moduleicon.gif";s:4:"1169";s:14:"res/css/be.css";s:4:"1eab";s:22:"res/img/ajaxloader.gif";s:4:"3cbd";}',
 	'suggests' => array(
 	),
 );
