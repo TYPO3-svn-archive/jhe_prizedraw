@@ -32,29 +32,29 @@ class tx_jheprizedraw_save {
 	/**
 	 * Main Methode
 	 *
-	 * @return string
+	 * @return	string
 	 */
 	public function main() {
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-		
+
 		//_GET-data to variables
 		$savedata = substr(t3lib_div::_GET('savedata'),0, -2);
 		$savedataArray = explode('::', $savedata);
-		
+
 		foreach($savedataArray as $val){
 			$singleArray = explode('|', $val);
 			$record = $singleArray[0];
 			$table = $singleArray[1];
-						
+
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 				$table,
 				'uid = ' . $record,
 				array('tx_jheprizedraw_prize_draw_winner' => time())
 			);
-			
+
 		}
 		$result = 'Die Gewinner wurden erfolgreich gespeichert!';
-		
+
 		return $result;
 	}
 }

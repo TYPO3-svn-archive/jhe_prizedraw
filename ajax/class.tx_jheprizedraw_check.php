@@ -32,42 +32,42 @@ class tx_jheprizedraw_check {
 	/**
 	 * Main Methode
 	 *
-	 * @return string
+	 * @return	string
 	 */
-	public function main() {      
+	public function main() {
 		$data = t3lib_div::_GET('data');
 		$type = t3lib_div::_GET('type');
 		$result = '';
-		
+
 		switch($type) {
 			case 'number':
 				if (!$data){
-					$result = "Bitte watt eingeben!";
+					$result = 'Bitte watt eingeben!';
 				} else if (!is_numeric($data)) {
-					$result = "Dat is doch keine Zahl!";
+					$result = 'Dat is doch keine Zahl!';
 				}
 				break;
 			case 'select':
 				if (!$data){
-					$result = "Bitte watt auswählen!";
-				} 
+					$result = 'Bitte watt auswählen!';
+				}
 				break;
 			case 'date':
-				$date = explode("-", $data);
+				$date = explode('-', $data);
 				$day = $date[0];
 				$month = $date[1];
 				$year = $date[2];
-				if ($data && !preg_match("/^[0123]?\d\-[01]?\d\-\d{4}$/", $data)){
-					$result = "Falsches Datumsformat!";
+				if ($data && !preg_match('/^[0123]?\d\-[01]?\d\-\d{4}$/', $data)){
+					$result = 'Falsches Datumsformat!';
 				} else if ($data && !checkdate($month, $day, $year)) {
-					$result = "Datum existiert nicht!";
-				} 
+					$result = 'Datum existiert nicht!';
+				}
 				break;
 			case '':
 				$result = 'O-o! No data-type!';
 				break;
 		}
-			
+
 		return $result;
 	}
 }

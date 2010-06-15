@@ -34,82 +34,77 @@ class tx_jheprizedraw_submit {
 	/**
 	 * Main Methode
 	 *
-	 * @return string
+	 * @return	string
 	 */
-	public function main() { 
+	public function main() {
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-		
+
 		//_GET-data to variables
 		$no_of_records = t3lib_div::_GET('no_of_records');
 		$record_type = t3lib_div::_GET('record_type');
 		$period_begin = explode('-', t3lib_div::_GET('period_begin'));
 		$period_end = explode('-', t3lib_div::_GET('period_end'));
 		$uid = t3lib_div::_GET('uid');
-		
-		$tstampBegin = mktime(0,0,0,$period_begin[1],$period_begin[0],$period_begin[2]); 
-		$tstampEnd = mktime(23,59,59,$period_end[1],$period_end[0],$period_end[2]); 
-		
-		$error = "";
-		
-		//Begin HTML output
-		$htmlOutput = "<script>
-						$(document).ready(function() {
-							$('#checkAll').click(function(){
-								var checked_status = this.checked;
-								$('input[name=update]').each(function(){
-									this.checked = checked_status;
-								});
-							});
-							
-							
-							
-							$('#bt_save').click(function() {
 
-								var checkedRecords = '';
-								var values = $('input[name=update]').serializeArray();
-								
-								$.each(values, function(i, values){
-      								checkedRecords += $(this).val() + '::';
-      							});
-																
-								$('#ajaxloader').show();
-								$.ajax({
-					    			url: '/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::save&savedata=' + checkedRecords + '',
-					    			success: function(result) {
-					    				$('#ajaxloader').hide();
-					    				$('#result').html(result);
-									}
-								});
-								return false;
-							});
+		$tstampBegin = mktime(0,0,0,$period_begin[1],$period_begin[0],$period_begin[2]);
+		$tstampEnd = mktime(23,59,59,$period_end[1],$period_end[0],$period_end[2]);
+
+		$error = '';
+
+		//Begin HTML output
+		$htmlOutput = '
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#checkAll").click(function(){
+						var checked_status = this.checked;
+						$("input[name=update]").each(function(){
+							this.checked = checked_status;
 						});
-						</script>
-						<h3>Ergebnis:</h3>
-						<table border='0' width='100%'>
-							<thead>
-    							<tr>
-      								<th>Name</th>
-      								<th>Adresse</th>
-      								<th>PLZ, Ort</th>
-      								<th>eMail</th>
-      								<th class='centered'><input type='checkbox' name='checkAll' id='checkAll' /></th>
-								</tr>
-  							</thead>
-  							<tbody>";		
-		
-		
-		
+					});
+
+					$("#bt_save").click(function() {
+						var checkedRecords = "";
+						var values = $("input[name=update]").serializeArray();
+						$.each(values, function(i, values){
+							checkedRecords += $(this).val() + "::";
+						});
+
+						$("#ajaxloader").show();
+						$.ajax({
+					    	url: "/dev/typo3/ajax.php?ajaxID=tx_jheprizedraw::save&savedata=" + checkedRecords + "",
+							success: function(result) {
+								$("#ajaxloader").hide();
+								$("#result").html(result);
+							}
+						});
+						return false;
+					});
+				});
+			</script>
+			<h3>Ergebnis:</h3>
+			<table border="0" width="100%">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Adresse</th>
+						<th>PLZ, Ort</th>
+						<th>eMail</th>
+						<th class="centered"><input type="checkbox" name="checkAll" id="checkAll" /></th>
+					</tr>
+				</thead>
+				<tbody>';
+
 		$maxFeusers = $this->getMaxRecords('fe_users', 'disable', $uid, 'crdate', $tstampBegin, $tstampEnd);
 		$maxTtaddress = $this->getMaxRecords('tt_address', 'hidden', $uid, 'tstamp', $tstampBegin, $tstampEnd);
-		$maxSum = ($maxFeusers + $maxTtaddress);		
-		
+		$maxSum = ($maxFeusers + $maxTtaddress);
+
 		switch($record_type) {
 			case 'fe_user':
 				if($maxFeusers >= $no_of_records){
 					$getFeusers = $no_of_records;
 					$getTt_address = 0;
 				} else {
-					$error = "Es sind zu wenig fe_users-Datensätze vorhanden!";
+					$error = 'Es sind zu wenig fe_users-Datensätze vorhanden!';
 				}
 				break;
 			case 'tt_address':
@@ -117,7 +112,7 @@ class tx_jheprizedraw_submit {
 					$getTt_address = $no_of_records;
 					$getFeusers = 0;
 				} else {
-					$error = "Es sind zu wenig tt_address-Datensätze vorhanden!";
+					$error = 'Es sind zu wenig tt_address-Datensätze vorhanden!';
 				}
 				break;
 			case 'both':
@@ -125,45 +120,52 @@ class tx_jheprizedraw_submit {
 					$rand = rand(1,$no_of_records);
 					if($maxFeusers >= $rand){
 						$getFeusers = $rand;
-						$getTt_address = $no_of_records - $rand; 
+						$getTt_address = $no_of_records - $rand;
 					} else {
 						$getFeusers = $maxFeusers;
-						$getTt_address = $no_of_records - $maxFeusers; 
+						$getTt_address = $no_of_records - $maxFeusers;
 					}
-					
 				} else {
-					$error = "Es sind insgesamt zu wenig Datensätze vorhanden!";
+					$error = 'Es sind insgesamt zu wenig Datensätze vorhanden!';
 				}
-				
 				break;
 		}
-		
-		
+
 		$htmlOutput .= $this->getSQLDataToTable('fe_users', 'disable', $uid, $getFeusers, 'crdate', $tstampBegin, $tstampEnd);
 		$htmlOutput .= $this->getSQLDataToTable('tt_address', 'hidden', $uid, $getTt_address, 'tstamp', $tstampBegin, $tstampEnd);
-				
-		$htmlOutput .= "</tbody></table><input type='submit' name='save' id='bt_save' value='Speichern' />";
-		
+
+		$htmlOutput .= '</tbody></table><input type="submit" name="save" id="bt_save" value="Speichern" />';
+
 		if(!$error) {
 			$result = $htmlOutput;
 		} else {
-			
 			$message = t3lib_div::makeInstance(
-				't3lib_FlashMessage', 
-                $error, 
+				't3lib_FlashMessage',
+				$error,
 				'Fehler bei der Eingabe',
 				t3lib_FlashMessage::ERROR,
 				FALSE
 			);
 			$result = $message->render();
 		}
-		
+
 		return $result;
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$table: ...
+	 * @param	[type]		$hidden: ...
+	 * @param	[type]		$uid: ...
+	 * @param	[type]		$create: ...
+	 * @param	[type]		$period_begin: ...
+	 * @param	[type]		$period_end: ...
+	 * @return	[type]		...
+	 */
 	public function getMaxRecords($table, $hidden, $uid, $create = '', $period_begin = '', $period_end = ''){
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-				
+
 		if(!$period_begin && !$period_end){ //both fields empty
 			$sqlWhere = '';
 		} else if($period_begin && !$period_end) { //period_begin filled, period_end empty
@@ -173,20 +175,31 @@ class tx_jheprizedraw_submit {
 		} else if($period_begin && $period_end) { //both fields filled
 			$sqlWhere = ' AND ' . $create . ' >= ' . $period_begin . ' AND ' . $create . ' <= ' . $period_end . '';
 		}
-		
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'COUNT(*)', 
-			$table, 
+			'COUNT(*)',
+			$table,
 			'deleted = 0 AND ' . $hidden . ' = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . $sqlWhere
 		);
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		
+
 		return $row['0'];
 	}
-	
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$table: ...
+	 * @param	[type]		$hidden: ...
+	 * @param	[type]		$uid: ...
+	 * @param	[type]		$noOfRecords: ...
+	 * @param	[type]		$create: ...
+	 * @param	[type]		$tstampBegin: ...
+	 * @param	[type]		$tstampEnd: ...
+	 * @return	[type]		...
+	 */
 	public function getSQLDataToTable ($table, $hidden, $uid, $noOfRecords , $create = '', $tstampBegin = '', $tstampEnd = '') {
-		
+
 		if(!$tstampBegin && !$tstampEnd){
 			$sqlWhereTime = '';
 		} else if ($tstampBegin && !$tstampEnd) {
@@ -196,34 +209,30 @@ class tx_jheprizedraw_submit {
 		} else if ($tstampBegin && $tstampEnd) {
 			$sqlWhereTime = ' AND ' . $create . ' >= ' . $tstampBegin . ' AND ' . $create . ' <= ' . $tstampEnd;
 		}
-		
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'uid,name, address, zip, city, email', 
-			$table, 
+			'uid,name, address, zip, city, email',
+			$table,
 			'deleted = 0 AND ' . $hidden . ' = 0 AND tx_jheprizedraw_prize_draw_winner = 0 AND pid = ' . $uid . $sqlWhereTime . '',
 			'',
 			'RAND()',
 			$noOfRecords
 		);
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			
 			$email = tslib_cObj::getMailTo($row['email'],$row['email']);
-			
-			$htmlOutput .= "<tr>
-      							<td>". $row['name'] ."</td>
-      							<td>". $row['address'] ."</td>
-      							<td>". $row['zip'] ." ". $row['city'] ."</td>
-      							<td><a href='" . $email[0] . "'>" . $email[1] . "</a></td>
-      							<td align='center'><input type='checkbox' name='update' id='update' value='" . $row['uid'] . "|" . $table . "' /></td>
-							</tr>"; 
+
+			$htmlOutput .= '
+								<tr>
+									<td>' . $row['name'] . '</td>
+									<td>' . $row['address'] . '</td>
+									<td>' . $row['zip'] . ' ' . $row['city'] . '</td>
+									<td><a href="' . $email[0] . '">' . $email[1] . '</a></td>
+									<td align="center"><input type="checkbox" name="update" id="update" value="' . $row['uid'] . '|' . $table . '" /></td>
+								</tr>';
 		}
-		
+
 		return $htmlOutput;
 	}
-	
-	
-	
-	
 }
 
 $output = t3lib_div::makeInstance('tx_jheprizedraw_submit');
