@@ -53,7 +53,7 @@ class tx_jheprizedraw_save {
 			);
 
 		}
-		$result = 'Die Gewinner wurden erfolgreich gespeichert!';
+		$result = $LANG->getLL('res_saveSuccess');
 
 		return $result;
 	}

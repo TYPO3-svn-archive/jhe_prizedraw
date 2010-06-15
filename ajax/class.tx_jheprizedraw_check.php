@@ -42,14 +42,14 @@ class tx_jheprizedraw_check {
 		switch($type) {
 			case 'number':
 				if (!$data){
-					$result = 'Bitte watt eingeben!';
+					$result = $LANG->getLL('err_noValue');
 				} else if (!is_numeric($data)) {
-					$result = 'Dat is doch keine Zahl!';
+					$result = $LANG->getLL('err_noNumber');
 				}
 				break;
 			case 'select':
 				if (!$data){
-					$result = 'Bitte watt auswählen!';
+					$result = $LANG->getLL('err_noSelection');
 				}
 				break;
 			case 'date':
@@ -58,13 +58,13 @@ class tx_jheprizedraw_check {
 				$month = $date[1];
 				$year = $date[2];
 				if ($data && !preg_match('/^[0123]?\d\-[01]?\d\-\d{4}$/', $data)){
-					$result = 'Falsches Datumsformat!';
+					$result = $LANG->getLL('err_wrongDateFormat');
 				} else if ($data && !checkdate($month, $day, $year)) {
-					$result = 'Datum existiert nicht!';
+					$result = $LANG->getLL('err_wrongDate');
 				}
 				break;
 			case '':
-				$result = 'O-o! No data-type!';
+				$result = $LANG->getLL('err_fatal');
 				break;
 		}
 

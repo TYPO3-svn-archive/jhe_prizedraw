@@ -23,6 +23,25 @@
 			<label index="lbl_bt_execute_firststep">Bitte ausfüllen...</label>
 			<label index="lbl_bt_execute_disabled">Bitte Fehler bereinigen...</label>
 			<label index="lbl_select">Bitte auswählen...</label>
+			<label index="lbl_recentWinner">Bisherige Gewinner:</label>
+			<label index="lbl_name">Name</label>
+			<label index="lbl_adress">Adresse</label>
+			<label index="lbl_zip">PLZ</label>
+			<label index="lbl_city">Ort</label>
+			<label index="lbl_mail">eMail</label>
+			<label index="lbl_date">Datum</label>
+			<label index="lbl_addrType">Art</label>
+			<label index="err_feUserRecords">Es sind zu wenig fe_users-Datensätze vorhanden!</label>
+			<label index="err_ttAddressRecords">Es sind zu wenig tt_address-Datensätze vorhanden!</label>
+			<label index="err_toFewRecords">Es sind insgesamt zu wenig Datensätze vorhanden!</label>
+			<label index="err_headerInsert">Fehler bei der Eingabe!</label>
+			<label index="res_saveSuccess">Die Gewinner wurden erfolgreich gespeichert!</label>
+			<label index="err_noValue">Bitte einen Wert eingeben!</label>
+			<label index="err_noNumber">Bitte eine Zahl eingeben!</label>
+			<label index="err_noSelection">Bitte treffen Sie eine Auswahl!</label>
+			<label index="err_wrongDateFormat">Falsches Datumsformat!</label>
+			<label index="err_wrongDate">Datum existiert nicht!</label>
+			<label index="err_fatal">Fataler Fehler! Bitte kontaktieren Sie Ihren Administrator!</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Verlosung</label>
@@ -42,6 +61,25 @@
 			<label index="lbl_bt_execute_firststep">Bitte ausfüllen...</label>
 			<label index="lbl_bt_execute_disabled">Bitte Fehler bereinigen...</label>
 			<label index="lbl_select">Bitte auswählen...</label>
+			<label index="lbl_recentWinner">Bisherige Gewinner:</label>
+			<label index="lbl_name">Name</label>
+			<label index="lbl_adress">Adresse</label>
+			<label index="lbl_zip">PLZ</label>
+			<label index="lbl_city">Ort</label>
+			<label index="lbl_mail">eMail</label>
+			<label index="lbl_date">Datum</label>
+			<label index="lbl_addrType">Art</label>
+			<label index="err_feUserRecords">Es sind zu wenig Nutzer-Datensätze vorhanden!</label>
+			<label index="err_ttAddressRecords">Es sind zu wenig Adress-Datensätze vorhanden!</label>
+			<label index="err_toFewRecords">Es sind insgesamt zu wenig Datensätze vorhanden!</label>
+			<label index="err_headerInsert">Fehler bei der Eingabe!</label>
+			<label index="res_saveSuccess">Die Gewinner wurden erfolgreich gespeichert!</label>
+			<label index="err_noValue">Bitte einen Wert eingeben!</label>
+			<label index="err_noNumber">Bitte eine Zahl eingeben!</label>
+			<label index="err_noSelection">Bitte treffen Sie eine Auswahl!</label>
+			<label index="err_wrongDateFormat">Falsches Datumsformat!</label>
+			<label index="err_wrongDate">Das eingegebene Datum existiert nicht!</label>
+			<label index="err_fatal">Fataler Fehler! Bitte kontaktieren Sie Ihren Administrator!</label>
 		</languageKey>
 	</data>
 </T3locallang>

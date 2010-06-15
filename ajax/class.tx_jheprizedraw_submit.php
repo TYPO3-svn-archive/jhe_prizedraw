@@ -104,7 +104,7 @@ class tx_jheprizedraw_submit {
 					$getFeusers = $no_of_records;
 					$getTt_address = 0;
 				} else {
-					$error = 'Es sind zu wenig fe_users-Datensätze vorhanden!';
+					$error = $LANG->getLL('err_feUserRecords');
 				}
 				break;
 			case 'tt_address':
@@ -112,7 +112,7 @@ class tx_jheprizedraw_submit {
 					$getTt_address = $no_of_records;
 					$getFeusers = 0;
 				} else {
-					$error = 'Es sind zu wenig tt_address-Datensätze vorhanden!';
+					$error = $LANG->getLL('err_ttAddressRecords');
 				}
 				break;
 			case 'both':
@@ -126,7 +126,7 @@ class tx_jheprizedraw_submit {
 						$getTt_address = $no_of_records - $maxFeusers;
 					}
 				} else {
-					$error = 'Es sind insgesamt zu wenig Datensätze vorhanden!';
+					$error = $LANG->getLL('err_toFewRecords');
 				}
 				break;
 		}
@@ -142,7 +142,7 @@ class tx_jheprizedraw_submit {
 			$message = t3lib_div::makeInstance(
 				't3lib_FlashMessage',
 				$error,
-				'Fehler bei der Eingabe',
+				$LANG->getLL('err_headerInsert'),
 				t3lib_FlashMessage::ERROR,
 				FALSE
 			);

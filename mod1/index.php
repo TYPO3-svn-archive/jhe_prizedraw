@@ -389,16 +389,16 @@ class  tx_jheprizedraw_module1 extends t3lib_SCbase {
 						$content = $LANG->getLL('error_root');
 					} else {
 						$content .= '
-							<h3>Bisherige Gewinner:</h3>
+							<h3>' . $LANG->getLL('lbl_recentWinner') . '</h3>
 							<table border="0" width="100%">
 								<thead>
 									<tr>
-										<th>Name</th>
-										<th>Adresse</th>
-										<th>PLZ, Ort</th>
-										<th>eMail</th>
-										<th>Datum</th>
-										<th>Art</th>
+										<th>' . $LANG->getLL('lbl_name') . '</th>
+										<th>' . $LANG->getLL('lbl_adress') . '</th>
+										<th>' . $LANG->getLL('lbl_zip') . ', ' . $LANG->getLL('lbl_city') . '</th>
+										<th>' . $LANG->getLL('lbl_mail') . '</th>
+										<th>' . $LANG->getLL('lbl_date') . '</th>
+										<th>' . $LANG->getLL('lbl_addrType') . '</th>
 									</tr>
 								</thead>
 								<tbody>';
