@@ -22,6 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+$GLOBALS['LANG']->includeLLFile('EXT:jhe_prizedraw/mod1/locallang.xml');
+
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 require_once(PATH_t3lib . 'class.t3lib_div.php');
@@ -104,7 +106,7 @@ class tx_jheprizedraw_submit {
 					$getFeusers = $no_of_records;
 					$getTt_address = 0;
 				} else {
-					$error = $LANG->getLL('err_feUserRecords');
+					$error = $GLOBALS['LANG']->getLL('err_feUserRecords');
 				}
 				break;
 			case 'tt_address':
@@ -112,7 +114,7 @@ class tx_jheprizedraw_submit {
 					$getTt_address = $no_of_records;
 					$getFeusers = 0;
 				} else {
-					$error = $LANG->getLL('err_ttAddressRecords');
+					$error = $GLOBALS['LANG']->getLL('err_ttAddressRecords');
 				}
 				break;
 			case 'both':
@@ -126,7 +128,7 @@ class tx_jheprizedraw_submit {
 						$getTt_address = $no_of_records - $maxFeusers;
 					}
 				} else {
-					$error = $LANG->getLL('err_toFewRecords');
+					$error = $GLOBALS['LANG']->getLL('err_toFewRecords');
 				}
 				break;
 		}
@@ -142,7 +144,7 @@ class tx_jheprizedraw_submit {
 			$message = t3lib_div::makeInstance(
 				't3lib_FlashMessage',
 				$error,
-				$LANG->getLL('err_headerInsert'),
+				$GLOBALS['LANG']->getLL('err_headerInsert'),
 				t3lib_FlashMessage::ERROR,
 				FALSE
 			);

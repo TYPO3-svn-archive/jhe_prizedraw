@@ -22,13 +22,16 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+$GLOBALS['LANG']->includeLLFile('EXT:jhe_prizedraw/mod1/locallang.xml');
+
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 require_once(PATH_t3lib . 'class.t3lib_div.php');
 require_once(PATH_t3lib . 'class.t3lib_db.php');
 
 class tx_jheprizedraw_check {
-
+	//global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	
 	/**
 	 * Main Methode
 	 *
@@ -44,12 +47,12 @@ class tx_jheprizedraw_check {
 				if (!$data){
 					$result = $LANG->getLL('err_noValue');
 				} else if (!is_numeric($data)) {
-					$result = $LANG->getLL('err_noNumber');
+					$result = $GLOBALS['LANG']->getLL('err_noNumber');
 				}
 				break;
 			case 'select':
 				if (!$data){
-					$result = $LANG->getLL('err_noSelection');
+					$result = $GLOBALS['LANG']->getLL('err_noSelection');
 				}
 				break;
 			case 'date':
@@ -58,13 +61,13 @@ class tx_jheprizedraw_check {
 				$month = $date[1];
 				$year = $date[2];
 				if ($data && !preg_match('/^[0123]?\d\-[01]?\d\-\d{4}$/', $data)){
-					$result = $LANG->getLL('err_wrongDateFormat');
+					$result = $GLOBALS['LANG']->getLL('err_wrongDateFormat');
 				} else if ($data && !checkdate($month, $day, $year)) {
-					$result = $LANG->getLL('err_wrongDate');
+					$result = $GLOBALS['LANG']->getLL('err_wrongDate');
 				}
 				break;
 			case '':
-				$result = $LANG->getLL('err_fatal');
+				$result = $GLOBALS['LANG']->getLL('err_fatal');
 				break;
 		}
 

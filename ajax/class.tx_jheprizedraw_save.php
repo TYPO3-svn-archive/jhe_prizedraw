@@ -22,6 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+$GLOBALS['LANG']->includeLLFile('EXT:jhe_prizedraw/mod1/locallang.xml');
+
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 require_once(PATH_t3lib . 'class.t3lib_div.php');
@@ -53,7 +55,7 @@ class tx_jheprizedraw_save {
 			);
 
 		}
-		$result = $LANG->getLL('res_saveSuccess');
+		$result = $GLOBALS['LANG']->getLL('res_saveSuccess');
 
 		return $result;
 	}
